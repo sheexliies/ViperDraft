@@ -23,6 +23,7 @@
     animation: float-small 2s infinite ease-in-out;
     z-index: 10;
     border-color: var(--primary);
+    opacity: 1;
 }
 
 /* 正在選秀 (Active) 時套用大浮動 */
