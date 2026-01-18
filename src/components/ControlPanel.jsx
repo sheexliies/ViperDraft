@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ControlPanel = ({ 
     settings, 
@@ -27,6 +27,13 @@ const ControlPanel = ({
 }) => {
     
     const [isCollapsed, setIsCollapsed] = useState(false);
+
+    // 當資料載入完成 (準備開始選秀) 時，自動收合面板以騰出空間
+    useEffect(() => {
+        if (isDataLoaded) {
+            setIsCollapsed(true);
+        }
+    }, [isDataLoaded]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
