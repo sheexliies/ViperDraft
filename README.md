@@ -58,6 +58,10 @@
 
 This project is built using Node.js and Vite.
 
+#### Prerequisites
+*   **Node.js**: v16.0 or higher (Recommended).
+*   **npm** (included with Node.js) or **yarn**.
+
 1.  **Install Dependencies**
     ```bash
     npm install
@@ -128,6 +132,10 @@ This project is built using Node.js and Vite.
 ### 🚀 安裝與執行
 
 本專案使用 Node.js 與 Vite 建置。
+
+#### 前置需求
+*   **Node.js**: 建議 v16.0 或更高版本。
+*   **npm** (通常隨 Node.js 安裝) 或 **yarn**。
 
 1.  **安裝依賴**
     ```bash
