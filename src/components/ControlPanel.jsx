@@ -19,7 +19,9 @@ const ControlPanel = ({
     toggleDarkMode,
     hasFile,
     onPreview,
-    swapSource
+    swapSource,
+    highQuality,
+    toggleHighQuality
 }) => {
     
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -166,6 +168,9 @@ const ControlPanel = ({
                 </button>
                 <button className="btn-outline btn-sm" onClick={onClearCache} style={{ color: 'var(--danger)', borderColor: 'var(--danger)' }}>
                     🗑️ 清除
+                </button>
+                <button className="btn-outline btn-sm" onClick={toggleHighQuality}>
+                    {highQuality ? '✨ 特效: 開' : '💨 特效: 關'}
                 </button>
                 <button className="btn-outline btn-sm" onClick={toggleDarkMode}>
                     {darkMode ? '☀️' : '🌙'}

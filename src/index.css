@@ -36,7 +36,7 @@ html {
 body {
     font-family: var(--font-family);
     background: var(--bg-color);
-    background-attachment: fixed;
+    background-attachment: scroll; /* 預設捲動背景 (效能較佳) */
     color: var(--text-color);
     margin: 0;    
     font-size: 22px;
@@ -45,6 +45,10 @@ body {
     overflow: visible;
     padding: 0;
     width: 100%;
+}
+
+body.high-quality {
+    background-attachment: fixed; /* 開啟特效時鎖定背景 */
 }
 
 .container {
@@ -78,24 +82,24 @@ h1 {
     color: var(--primary);
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
     animation: float 3s ease-in-out infinite;
+    will-change: transform; /* 告知瀏覽器提前優化動畫 */
 }
 
 .sticky-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(240, 242, 245, 0.85); /* 淺色模式半透明背景 */
-    backdrop-filter: blur(12px);           /* 毛玻璃模糊效果 */
-    -webkit-backdrop-filter: blur(12px);   /* Safari 支援 */
+    background: var(--card-bg); /* 預設實心背景 */
     border-bottom: 1px solid rgba(0,0,0,0.05);
     padding-bottom: 10px;
     margin-bottom: 20px;
     transition: box-shadow 0.3s ease, background 0.3s ease;
 }
 
-body.dark-mode .sticky-header {
-    background: rgba(20, 25, 35, 0.7);     /* 深色模式半透明背景 */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* 微亮邊框增加質感 */
+body.high-quality .sticky-header {
+    background: rgba(240, 242, 245, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .sticky-header.scrolled {
@@ -110,24 +114,30 @@ body.dark-mode .sticky-header {
 }
 
 .control-panel {
-    background: rgba(255, 255, 255, 0.65); /* 淺色模式：半透明白 */
-    backdrop-filter: blur(16px);           /* 強力模糊背景 */
-    -webkit-backdrop-filter: blur(16px);
+    background: var(--card-bg); /* 預設實心背景 */
     padding: 25px;
     border-radius: var(--border-radius);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* 更有層次感的陰影 */
+    box-shadow: var(--card-shadow);
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(255, 255, 255, 0.4); /* 半透明邊框 */
+    border: 1px solid var(--border-color);
     gap: 15px;
 }
 
-/* 深色模式下的 ControlPanel 毛玻璃 */
-body.dark-mode .control-panel {
-    background: rgba(30, 35, 45, 0.6);     /* 深色模式：半透明黑藍 */
+body.high-quality .control-panel {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* 深色模式 + 高畫質 */
+body.high-quality.dark-mode .control-panel,
+body.high-quality.dark-mode .sticky-header {
+    background: rgba(30, 35, 45, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 .panel-header {
@@ -204,14 +214,16 @@ input[type="number"] {
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.5); /* 輸入框改為半透明 */
-    backdrop-filter: blur(4px);
+    background: var(--bg-color); /* 預設實心 */
     color: var(--text-color);
     font-size: 1em;
 }
 
-/* 深色模式下的輸入框樣式 */
-body.dark-mode input[type="number"] {
+body.high-quality input[type="number"] {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+}
+body.high-quality.dark-mode input[type="number"] {
     background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.2);
     color: white;
@@ -228,7 +240,6 @@ button {
     display: flex;
     align-items: center;
     gap: 8px;
-    backdrop-filter: blur(4px); /* 按鈕毛玻璃效果 */
 }
 
 .btn-primary { background-color: var(--primary); color: #fff; }
@@ -243,39 +254,50 @@ button {
 .btn-success:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
 
 .btn-outline { 
-    background: rgba(255, 255, 255, 0.3); /* 淺色模式半透明 */
-    border: 1px solid rgba(0, 0, 0, 0.1); 
+    background: transparent;
+    border: 1px solid var(--border-color);
     color: var(--text-color); 
 }
-.btn-outline:hover { background: rgba(255, 255, 255, 0.5); }
+.btn-outline:hover { background: rgba(0,0,0,0.05); }
 
-body.dark-mode .btn-outline {
-    background: rgba(0, 0, 0, 0.3); /* 深色模式半透明 */
+body.high-quality .btn-outline {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4px);
+}
+body.high-quality .btn-outline:hover { background: rgba(255, 255, 255, 0.5); }
+
+body.high-quality.dark-mode .btn-outline {
+    background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.2);
     color: #ffffff;
 }
-body.dark-mode .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
+body.high-quality.dark-mode .btn-outline:hover { background: rgba(255, 255, 255, 0.1); }
 
 button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
 .status-bar {
-    background: rgba(255, 255, 255, 0.65); /* 狀態列也改為毛玻璃 */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: var(--card-bg);
     padding: 15px 20px;
     border-radius: var(--border-radius);
     margin-bottom: 30px;
     font-size: 1em;
     border-left: 5px solid var(--primary);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    box-shadow: var(--card-shadow);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* 深色模式下的狀態列 */
-body.dark-mode .status-bar {
+body.high-quality .status-bar {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+body.high-quality.dark-mode .status-bar {
     background: rgba(30, 35, 45, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
@@ -329,7 +351,6 @@ body.dark-mode .status-bar {
     border: 2px solid var(--primary);
     opacity: 1;
     z-index: 2;
-    animation: flashHighlight 1s ease-out;
 }
 
 .team-header {
@@ -406,21 +427,29 @@ body.dark-mode .file-btn {
 @media (max-width: 768px) {
     .control-panel { flex-direction: column; align-items: stretch; }
     .teams-grid { grid-template-columns: 1fr; }
+    
+    /* === 手機版效能優化 === */
+    .viper-logo, .picking-char, .team-card {
+        /* 手機上若覺得卡，可減少陰影運算，目前先保留 */
+    }
 }
 
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
 .modal-overlay.open { opacity: 1; pointer-events: auto; }
 .modal-content { 
-    background: rgba(255, 255, 255, 0.85); /* 淺色模式：半透明白 */
-    backdrop-filter: blur(16px);           /* 毛玻璃模糊效果 */
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.4); /* 半透明邊框 */
+    background: var(--card-bg);
     padding: 20px; border-radius: var(--border-radius); width: 90%; max-width: 600px; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 8px 32px rgba(0,0,0,0.25); color: var(--text-color); 
 }
 
-/* 深色模式下的視窗毛玻璃 */
-body.dark-mode .modal-content {
-    background: rgba(36, 37, 38, 0.75);    /* 深色模式：半透明深灰 */
+body.high-quality .modal-content {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+body.high-quality.dark-mode .modal-content {
+    background: rgba(36, 37, 38, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -436,11 +465,14 @@ body.dark-mode .close-btn {
 }
 
 .search-container { margin-bottom: 15px; }
-.search-input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(4px); color: var(--text-color); font-size: 1em; box-sizing: border-box; }
+.search-input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-color); font-size: 1em; box-sizing: border-box; }
 .search-input:focus { outline: none; border-color: var(--primary); }
 
-/* 深色模式下的搜尋框 */
-body.dark-mode .search-input {
+body.high-quality .search-input {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(4px);
+}
+body.high-quality.dark-mode .search-input {
     background: rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.2);
     color: white;
@@ -487,17 +519,6 @@ body.dark-mode .preview-table tr:hover { background-color: rgba(255,255,255,0.05
     100% { box-shadow: 0 0 0 0 transparent; }
 }
 
-@keyframes pickingPulse {
-    from {
-        box-shadow: 0 0 5px var(--primary);
-        transform: translateY(-5px);
-    }
-    to {
-        box-shadow: 0 0 25px var(--primary);
-        transform: translateY(-8px) scale(1.02);
-    }
-}
-
 /* Picking 波浪文字動畫 */
 .picking-badge {
     position: absolute;
@@ -516,6 +537,7 @@ body.dark-mode .preview-table tr:hover { background-color: rgba(255,255,255,0.05
 .picking-char {
     display: inline-block;
     animation: waveJump 1.2s infinite ease-in-out;
+    will-change: transform;
 }
 
 .picking-char:nth-child(1) { animation-delay: 0.0s; }
@@ -532,12 +554,6 @@ body.dark-mode .preview-table tr:hover { background-color: rgba(255,255,255,0.05
 @keyframes waveJump {
     0%, 100% { transform: translateY(0); }
     25% { transform: translateY(-10px); }
-}
-
-@keyframes flashHighlight {
-    0% { box-shadow: 0 0 0 0 var(--primary); transform: scale(1); }
-    50% { box-shadow: 0 0 30px var(--primary); transform: scale(1.02); }
-    100% { box-shadow: 0 0 0 0 transparent; transform: scale(1); }
 }
 
 /* Loading 遮罩 */

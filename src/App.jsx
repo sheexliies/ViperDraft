@@ -43,6 +43,21 @@ function App() {
         }
     }, [darkMode]);
 
+    // High Quality Mode (特效開關)
+    const [highQuality, setHighQuality] = useState(() => {
+        const saved = localStorage.getItem('draftHighQuality');
+        return saved !== null ? JSON.parse(saved) : true;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('draftHighQuality', JSON.stringify(highQuality));
+        if (highQuality) {
+            document.body.classList.add('high-quality');
+        } else {
+            document.body.classList.remove('high-quality');
+        }
+    }, [highQuality]);
+
     // 資料狀態
     const [allPlayers, setAllPlayers] = useState(() => {
         try {
@@ -613,6 +628,8 @@ function App() {
                         hasFile={allPlayers.length > 0}
                         onPreview={() => setIsPreviewOpen(true)}
                         swapSource={swapSource}
+                        highQuality={highQuality}
+                        toggleHighQuality={() => setHighQuality(!highQuality)}
                     />
                     <StatusBar message={draftStatus.message} progress={draftStatus.progress} type={draftStatus.messageType} />
                 </div>

@@ -4,32 +4,53 @@
     will-change: transform; /* 效能優化 */
 }
 
-/* 1. 小浮動動畫 (給一般卡片 Hover 用) */
-@keyframes float-small {
+/* === 基礎動畫 (僅位移，效能極佳) === */
+@keyframes float-small-basic {
+    0% { transform: translateY(-4px) scale(1.02); }
+    50% { transform: translateY(-8px) scale(1.02); }
+    100% { transform: translateY(-4px) scale(1.02); }
+}
+
+@keyframes float-big-basic {
+    0% { transform: translateY(-8px) scale(1.05); }
+    50% { transform: translateY(-16px) scale(1.05); }
+    100% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* === 高畫質動畫 (含陰影變化，視覺較佳但較吃效能) === */
+@keyframes float-small-hq {
     0% { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
     50% { transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); }
     100% { transform: translateY(-4px) scale(1.02); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); }
 }
 
-/* 2. 大浮動動畫 (給正在選秀 Picking 用) */
-@keyframes float-big {
-    0% { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border-color: var(--primary); }
-    50% { transform: translateY(-16px) scale(1.05); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); border-color: var(--primary); }
-    100% { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); border-color: var(--primary); }
+@keyframes float-big-hq {
+    0% { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); }
+    50% { transform: translateY(-16px) scale(1.05); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); }
+    100% { transform: translateY(-8px) scale(1.05); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); }
 }
 
-/* 一般卡片 Hover 時套用小浮動 */
+/* 預設使用基礎動畫 */
 .team-card:hover {
-    animation: float-small 2s infinite ease-in-out;
+    animation: float-small-basic 2s infinite ease-in-out;
     z-index: 10;
     border-color: var(--primary);
     opacity: 1;
 }
 
-/* 正在選秀 (Active) 時套用大浮動 */
 .team-card.active,
 .team-card.active:hover {
-    animation: float-big 2s infinite ease-in-out;
+    animation: float-big-basic 2s infinite ease-in-out;
     z-index: 15;
     border-width: 2px;
+}
+
+/* 開啟特效時，升級為 HQ 動畫 */
+body.high-quality .team-card:hover {
+    animation: float-small-hq 2s infinite ease-in-out;
+}
+
+body.high-quality .team-card.active,
+body.high-quality .team-card.active:hover {
+    animation: float-big-hq 2s infinite ease-in-out;
 }
