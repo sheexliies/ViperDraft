@@ -81,8 +81,11 @@ h1 {
     height: 42px;
     color: var(--primary);
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-    animation: float 3s ease-in-out infinite;
     will-change: transform; /* 告知瀏覽器提前優化動畫 */
+}
+
+body.high-quality .viper-logo {
+    animation: float 3s ease-in-out infinite;
 }
 
 .sticky-header {
@@ -536,8 +539,11 @@ body.dark-mode .preview-table tr:hover { background-color: rgba(255,255,255,0.05
 
 .picking-char {
     display: inline-block;
-    animation: waveJump 1.2s infinite ease-in-out;
     will-change: transform;
+}
+
+body.high-quality .picking-char {
+    animation: waveJump 1.2s infinite ease-in-out;
 }
 
 .picking-char:nth-child(1) { animation-delay: 0.0s; }

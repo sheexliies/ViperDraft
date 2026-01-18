@@ -57,7 +57,7 @@ const ControlPanel = ({
                 <span className="panel-title">控制面板</span>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     <button className="btn-outline btn-sm" onClick={toggleHighQuality} title={highQuality ? "切換為省電模式" : "切換為高畫質"}>
-                        {highQuality ? '✨' : '💨'}
+                        {highQuality ? '💨' : '✨'}
                     </button>
                     <button className="btn-outline btn-sm" onClick={toggleDarkMode} title="切換深色/淺色模式">
                         {darkMode ? '☀️' : '🌙'}
