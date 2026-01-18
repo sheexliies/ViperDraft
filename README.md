@@ -72,7 +72,8 @@ If you are a developer or want to run it offline:
 1.  **Prerequisites**: Node.js (v16+) and npm/yarn.
 2.  **Install Dependencies**: `npm install`
 3.  **Start Server**: `npm run dev`
-4.  **Build**: `npm run build`
+4.  **Click the link to start**: `http://localhost:5173/ViperDraft/`
+5.  **Stop the server**: `Ctrl+C`
 
 ###  Usage Guide
 
@@ -91,6 +92,7 @@ Once you have opened the application (Online or Local):
 4.  **Adjust & Export**:
     *   Drag and drop players to swap if needed.
     *   Click **Export Results** to save the final rosters.
+    *   Option to **export scores**
 
 ### 🕹️ Button Guide
 
@@ -186,7 +188,8 @@ Once you have opened the application (Online or Local):
 1.  **前置需求**：Node.js (v16+) 與 npm/yarn。
 2.  **安裝依賴**：`npm install`
 3.  **啟動伺服器**：`npm run dev`
-4.  **建置版本**：`npm run build`
+4.  **點擊連結開始使用**：`http://localhost:5173/ViperDraft/`
+5.  **退出伺服器**:`Ctrl+C`
 
 ### 📖 使用教學
 
@@ -206,6 +209,7 @@ Once you have opened the application (Online or Local):
 4.  **調整與匯出**：
     *   選秀結束後，可透過拖曳或點擊來交換隊員。
     *   點擊 **匯出結果** 下載最終名單。
+    *   可勾選是否**匯出分數**
 
 ### 🕹️ 按鍵功能說明
 
