@@ -294,7 +294,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
     position: relative;
     box-shadow: var(--card-shadow);
     scroll-margin-top: var(--header-offset);
-    opacity: 0; /* 預設隱藏，等待動畫執行 */
     animation: fadeIn 0.5s ease-out forwards;
 }
 
@@ -433,7 +432,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255
 
 .preview-table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
 .preview-table th, .preview-table td { padding: 10px; text-align: left; border-bottom: 1px solid var(--border-color); }
-.preview-table th { background-color: var(--bg-color); position: sticky; top: 0; font-weight: 600; }
+.preview-table th { background: var(--card-bg); position: sticky; top: 0; font-weight: 600; z-index: 2; }
 .preview-table tr:hover { background-color: rgba(0,0,0,0.02); }
 
 body.dark-mode .preview-table tr:hover { background-color: rgba(255,255,255,0.05); }
