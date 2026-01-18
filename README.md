@@ -43,6 +43,7 @@
     *   Automatically reads `team`, `name`, and `score` columns.
     *   **Template Download**: Provides a standard Excel template.
     *   **Data Preview**: Preview imported data directly in the UI.
+    *   **Smart Validation**: Automatically detects headers, filters invalid rows (score ≤ 0), and checks for **duplicate names**.
 *   **Persistence**:
     *   All settings, rosters, and draft progress are automatically saved to **LocalStorage**.
     *   Seamlessly resume operations after page reload.
@@ -55,6 +56,7 @@
     *   Supports auto-scrolling when dragging near screen edges.
 *   **Undo**: Revert the last selection at any time.
 *   **Export Results**: Export final groupings to an Excel file.
+    *   **Customizable**: Option to include or exclude player scores in the export.
 
 ### 📖 Usage Guide
 
@@ -72,6 +74,30 @@
 4.  **Adjust & Export**:
     *   Drag and drop players to swap if needed.
     *   Click **Export Results** to save the final rosters.
+
+### 🕹️ Button Guide
+
+| Icon | Button | Description |
+| :---: | :--- | :--- |
+| 📂 | **Select File** | Upload your player list (`.xlsx`). |
+| 📥 | **Template** | Download the standard Excel template. |
+| 👀 | **Preview** | View the uploaded player data. |
+| 📥 | **Load** | Initialize the draft board based on settings. |
+| 🚀 | **Auto Draft** | Instantly complete the draft using AI. |
+| ➡️ | **Next Pick** | Let AI make the next single selection. |
+| 👆 | **Manual Pick** | Open search window to pick a specific player. |
+| ↩️ | **Undo** | Revert the last selection. |
+| 💾 | **Export** | Download the final team rosters. |
+| 🔄 | **Reset** | Reset draft progress (keeps settings). |
+| 🗑️ | **Clear** | Clear all cached data and reload page. |
+
+### ⚡ Workflow Overview
+
+1.  **Data Prep** 📝 : Download Template → Fill Data → Upload File.
+2.  **Setup** ⚙️ : Set Teams/Players/Scores → Click **Load**.
+3.  **Drafting** 🎲 : Use **Auto Draft** or **Manual Pick** until full.
+4.  **Refining** 🔧 : Drag & Drop to swap players if needed.
+5.  **Export** 📤 : Click **Export Results** to save file.
 
 ### � Installation & Run
 
@@ -137,6 +163,7 @@ This project is built using Node.js and Vite.
     *   自動讀取 `team` (隊長/隊名)、`name` (姓名)、`score` (分數) 欄位。
     *   提供 **標準範本下載** 功能。
     *   **名單預覽**：可直接在介面上預覽匯入的資料。
+    *   **智慧驗證**：自動偵測標題列、過濾無效資料 (分數 ≤ 0)、並檢查 **重複姓名**。
 *   **資料持久化 (Persistence)**：
     *   所有設定、名單、選秀進度皆自動儲存於瀏覽器 **LocalStorage**。
     *   重新整理頁面後可無縫接續操作。
@@ -149,6 +176,7 @@ This project is built using Node.js and Vite.
     *   拖曳時支援視窗邊緣自動捲動。
 *   **上一步 (Undo)**：可隨時回溯上一次的選擇。
 *   **結果匯出**：將最終分組結果匯出為 Excel 檔案。
+    *   **自訂選項**：可勾選是否要在匯出檔案中包含隊員分數。
 
 ### 📖 使用教學
 
@@ -167,6 +195,30 @@ This project is built using Node.js and Vite.
 4.  **調整與匯出**：
     *   選秀結束後，可透過拖曳或點擊來交換隊員。
     *   點擊 **匯出結果** 下載最終名單。
+
+### 🕹️ 按鍵功能說明
+
+| 圖示 | 按鈕名稱 | 功能描述 |
+| :---: | :--- | :--- |
+| 📂 | **選擇檔案** | 上傳您的球員名單 Excel 檔。 |
+| 📥 | **範本** | 下載標準格式範本，方便填寫。 |
+| 👀 | **預覽** | 檢視目前程式讀取到的名單資料。 |
+| 📥 | **載入** | 鎖定設定並初始化選秀看板。 |
+| 🚀 | **自動選秀** | 由 AI 瞬間完成剩餘的所有選秀。 |
+| ➡️ | **下一步** | 由 AI 自動幫當前隊伍選一人。 |
+| 👆 | **手動選人** | 開啟搜尋視窗，指定特定球員。 |
+| ↩️ | **上一步** | 復原上一次的選擇操作。 |
+| 💾 | **匯出結果** | 將最終分組名單下載為 Excel。 |
+| 🔄 | **重置** | 清空選秀進度，回到初始狀態。 |
+| 🗑️ | **清除** | 強制清除所有暫存並重新整理頁面。 |
+
+### ⚡ 快速流程表
+
+1.  **準備資料** 📝：下載範本 → 填寫名單 → 上傳檔案。
+2.  **初始設定** ⚙️：調整隊伍數、人數、分數上下限 → 點擊 **「載入」**。
+3.  **進行選秀** 🎲：使用 **「自動選秀」** (快速) 或 **「手動選人」** (精準)。
+4.  **戰力調整** 🔧：選秀結束後，可拖曳或點擊交換隊員。
+5.  **存檔匯出** 📤：點擊 **「匯出結果」** 保存最終名單。
 
 ### 🚀 安裝與執行
 
