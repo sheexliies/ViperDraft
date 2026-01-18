@@ -72,7 +72,8 @@ If you are a developer or want to run it offline:
 1.  **Prerequisites**: Node.js (v16+) and npm/yarn.
 2.  **Install Dependencies**: `npm install`
 3.  **Start Server**: `npm run dev`
-4.  **Build**: `npm run build`
+4.  **Click the link to start**: `http://localhost:5173/ViperDraft/`
+5.  **Stop the server**: `Ctrl+C`
 
 ###  Usage Guide
 
@@ -91,6 +92,7 @@ Once you have opened the application (Online or Local):
 4.  **Adjust & Export**:
     *   Drag and drop players to swap if needed.
     *   Click **Export Results** to save the final rosters.
+    *   Option to **export scores**
 
 ### 🕹️ Button Guide
 
@@ -123,7 +125,7 @@ Once you have opened the application (Online or Local):
 
 **ViperDraft** 是一個基於 React 與 Vite 開發的網頁版選秀模擬工具，專為需要平衡隊伍實力（如遊戲競賽、分組活動）的場景設計。它結合了 **S 型選秀 (Snake Draft)** 順序與 **Softmax 加權隨機演算法**，並具備智慧型的防死鎖機制，確保每支隊伍都能在分數限制內完成組隊。
 
-> **🚀 立即體驗！** 點擊上方的 **Online Demo** 徽章，無需安裝即可直接在瀏覽器中開始使用。
+> **🚀 立即體驗！** 點擊上方的 **[Online Demo](https://sheexliies.github.io/ViperDraft/)** 徽章，無需安裝即可直接在瀏覽器中開始使用。
 
 ### ✨ 主要功能
 
@@ -178,7 +180,7 @@ Once you have opened the application (Online or Local):
 
 #### 方法一：線上版 (推薦)
 無需安裝，點擊下方連結即可直接在瀏覽器中使用。
-*   **👉 開啟 ViperDraft 線上版**
+*   **[👉 開啟 ViperDraft 線上版](https://sheexliies.github.io/ViperDraft/)**
 
 #### 方法二：本地安裝 (開發者)
 如果您需要離線使用或進行開發：
@@ -186,7 +188,8 @@ Once you have opened the application (Online or Local):
 1.  **前置需求**：Node.js (v16+) 與 npm/yarn。
 2.  **安裝依賴**：`npm install`
 3.  **啟動伺服器**：`npm run dev`
-4.  **建置版本**：`npm run build`
+4.  **點擊連結開始使用**：`http://localhost:5173/ViperDraft/`
+5.  **退出伺服器**:`Ctrl+C`
 
 ### 📖 使用教學
 
@@ -206,6 +209,7 @@ Once you have opened the application (Online or Local):
 4.  **調整與匯出**：
     *   選秀結束後，可透過拖曳或點擊來交換隊員。
     *   點擊 **匯出結果** 下載最終名單。
+    *   可勾選是否**匯出分數**
 
 ### 🕹️ 按鍵功能說明
 
