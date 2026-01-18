@@ -170,7 +170,7 @@ const ControlPanel = ({
                     🗑️ 清除
                 </button>
                 <button className="btn-outline btn-sm" onClick={toggleHighQuality}>
-                    {highQuality ? '✨ 特效: 開' : '💨 特效: 關'}
+                    {highQuality ? '✨ 高畫質: ON' : '💨 省電模式'}
                 </button>
                 <button className="btn-outline btn-sm" onClick={toggleDarkMode}>
                     {darkMode ? '☀️' : '🌙'}
