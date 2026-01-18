@@ -1,6 +1,6 @@
 # ViperDraft (S-Type Draft Simulator)
 
-[![Online Demo](https://img.shields.io/badge/Online-Demo-blue)](https://sheexliies.github.io/Draftdata/)
+[![Online Demo](https://img.shields.io/badge/Online-Demo-blue)](https://sheexliies.github.io/ViperDraft/)
 ![Coding by](https://img.shields.io/badge/Coding%20by-Gemini%203%20Pro-orange)
 
 [English](#english) | [中文](#chinese)
@@ -151,7 +151,7 @@ This project is built using Node.js and Vite.
 ## 📂 Project Structure / 專案結構
 
 ```
-Draftdata/
+ViperDraft/
 ├── src/
 │   ├── components/
 │   │   ├── ControlPanel.jsx    # 控制面板 (設定、按鈕群組)
