@@ -227,17 +227,109 @@ function App() {
             const wb = XLSX.read(bstr, { type: 'binary' });
             const wsname = wb.SheetNames[0];
             const ws = wb.Sheets[wsname];
-            const data = XLSX.utils.sheet_to_json(ws);
+            
+            // 改用陣列模式讀取，以便自動偵測標題列並過濾無關內容
+            const rawData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+            
+            if (!rawData || rawData.length === 0) {
+                setDraftStatus(prev => ({ ...prev, message: "檔案內容為空", messageType: "error" }));
+                return;
+            }
 
-            // 依照需求只抓取 team, name, score 欄位，忽略其他
-            const formattedData = data.map((row, index) => {
-                return {
-                    id: index,
-                    name: row['name'] || row['Name'] || row['姓名'] || `Player ${index}`,
-                    score: row['score'] || row['Score'] || row['sorce'] || row['分數'] || 0,
-                    team: row['team'] || row['team'] || null
-                };
-            }).filter(p => p.name && p.score !== undefined);
+            // 關鍵字定義 (支援中英文模糊比對)
+            const keys = {
+                name: ['name', '姓名', '隊員', '選手', 'player', 'Name', 'NAME', 'Player', 'PLAYER'],
+                score: ['score', '分數', 'rating', 'points', 'sorce', 'Score', 'SCORE', 'Points', 'POINTS'],
+                team: ['team', '隊伍', '隊長', 'captain', 'group', 'Team', 'TEAM', 'Captain', 'CAPTAIN']
+            };
+
+            // 1. 尋找標題列 (Header Row)
+            let headerIndex = -1;
+            let colMap = { name: -1, score: -1, team: -1 };
+
+            for (let i = 0; i < rawData.length; i++) {
+                // 轉為字串並修剪空白
+                const row = rawData[i].map(cell => String(cell).trim());
+                const rowLower = row.map(cell => cell.toLowerCase());
+                
+                // 檢查這一列是否包含必要的關鍵字 (Name & Score)
+                // 使用小寫比對來支援各種大小寫組合
+                const nameIdx = rowLower.findIndex(cell => keys.name.some(k => cell.includes(k.toLowerCase())));
+                const scoreIdx = rowLower.findIndex(cell => keys.score.some(k => cell.includes(k.toLowerCase())));
+                
+                if (nameIdx !== -1 && scoreIdx !== -1) {
+                    headerIndex = i;
+                    colMap.name = nameIdx;
+                    colMap.score = scoreIdx;
+                    colMap.team = rowLower.findIndex(cell => keys.team.some(k => cell.includes(k.toLowerCase())));
+                    break;
+                }
+            }
+
+            let formattedData = [];
+
+            if (headerIndex !== -1) {
+                // 2. 有找到標題，從下一列開始抓，並過濾無效行
+                formattedData = rawData.slice(headerIndex + 1).map((row, index) => {
+                    const nameVal = row[colMap.name];
+                    const scoreVal = row[colMap.score];
+                    const teamVal = colMap.team !== -1 ? row[colMap.team] : null;
+
+                    if (!nameVal) return null; // 名字是必須的
+
+                    return {
+                        id: index,
+                        name: String(nameVal).trim(),
+                        score: parseFloat(scoreVal) || 0,
+                        team: teamVal ? String(teamVal).trim() : null
+                    };
+                }).filter(p => p !== null && !isNaN(p.score) && p.score > 0);
+            } else {
+                // 3. 沒找到標題，嘗試使用舊的物件模式 (Fallback)
+                const jsonData = XLSX.utils.sheet_to_json(ws);
+                formattedData = jsonData.map((row, index) => {
+                    // 嘗試尋找對應的 Key
+                    const rowKeys = Object.keys(row);
+                    const nameKey = rowKeys.find(k => keys.name.some(kw => k.toLowerCase().includes(kw))) || 'name';
+                    const scoreKey = rowKeys.find(k => keys.score.some(kw => k.toLowerCase().includes(kw))) || 'score';
+                    const teamKey = rowKeys.find(k => keys.team.some(kw => k.toLowerCase().includes(kw))) || 'team';
+
+                    return {
+                        id: index,
+                        name: row[nameKey] || row['Name'] || row['姓名'] || null,
+                        score: parseFloat(row[scoreKey] || row['Score'] || row['分數']) || 0,
+                        team: row[teamKey] || row['Team'] || row['隊伍'] || row['隊長'] || null
+                    };
+                }).filter(p => p.name && p.score > 0);
+            }
+
+            if (formattedData.length === 0) {
+                 setDraftStatus(prev => ({ ...prev, message: "無法讀取有效資料，請確認 Excel 包含「姓名」與「分數」欄位，且分數大於 0", messageType: "error" }));
+                 return;
+            }
+
+            // 4. 檢查重複隊員姓名 (不分大小寫)
+            const seenNames = new Set();
+            const duplicates = new Set();
+            
+            formattedData.forEach(p => {
+                const normalized = p.name.toLowerCase();
+                if (seenNames.has(normalized)) {
+                    duplicates.add(p.name);
+                } else {
+                    seenNames.add(normalized);
+                }
+            });
+
+            if (duplicates.size > 0) {
+                const dupList = Array.from(duplicates).join(', ');
+                setDraftStatus(prev => ({ 
+                    ...prev, 
+                    message: `錯誤：名單中包含重複的姓名 (${dupList})，請修正後重新上傳`, 
+                    messageType: "error" 
+                }));
+                return;
+            }
 
             setAllPlayers(formattedData);
             setDraftStatus(prev => ({ ...prev, message: `已讀取 ${formattedData.length} 位隊員資料`, messageType: 'success' }));
@@ -534,9 +626,11 @@ function App() {
     const handleDownloadTemplate = () => {
         const ws = XLSX.utils.aoa_to_sheet([
             ['team', 'name', 'score'],
-            ['Team 1', 'Player A', 10],
-            ['', 'Player B', 8],
-            ['Team 2', 'Player C', 12]
+            ['Team A', '選手甲', 10],
+            ['Team B', '選手乙', 10],
+            ['', '選手丙', 8],
+            ['', '選手丁', 8],
+            ['', '選手戊', 5]
         ]);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Template");
