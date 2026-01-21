@@ -24,8 +24,8 @@
 
 #### Interface & Operation
 *   **Control Panel**:
-    *   Collapsible to save screen space.
-    *   **Quick Toggles**: Top-right buttons for Dark Mode and **Rich/Performance Mode**.
+    *   Collapsible to save screen space (Auto-collapses on load).
+    *   **Quick Toggles**: Top-right buttons for **Language**, Dark Mode, and **Rich/Performance Mode**.
 *   **Manual Pick**:
     *   Search functionality.
     *   **Risk Analysis**: Displays selection risk (✅ Safe, ⚠️ Risk, ❌ Invalid) with detailed tooltips.
@@ -34,6 +34,7 @@
     *   **Picking Animation**: Wave text animation and flash highlight for the active team.
     *   **Auto-Scroll**: Automatically scrolls to the current drafting team.
 *   **Visual Customization**:
+    *   **Multi-language**: Instant switching between English and Traditional Chinese.
     *   **Dark Mode**: One-click toggle between Dark/Light themes with auto-save.
     *   **Rich / Performance Mode**: Toggle between rich Glassmorphism effects (Rich Mode) and a static mode optimized for speed (Performance Mode).
 
@@ -139,8 +140,8 @@ Once you have opened the application (Online or Local):
 
 #### 操作與介面
 *   **控制面板**：
-    *   可收合/展開，節省螢幕空間。
-    *   **快速切換**：右上角按鈕可快速切換深色模式與 **精緻/流暢模式**。
+    *   可收合/展開，節省螢幕空間 (載入後自動收合)。
+    *   **快速切換**：右上角按鈕可快速切換 **語言**、深色模式與 **精緻/流暢模式**。
     *   輸入防呆與紅框警告。
 *   **手動選人 (Manual Pick)**：
     *   提供搜尋功能。
@@ -150,6 +151,7 @@ Once you have opened the application (Online or Local):
     *   **Picking 動畫**：輪到該隊時顯示波浪文字動畫與高亮閃爍效果。
     *   **自動定位**：畫面會自動捲動至當前選秀隊伍。
 *   **視覺自訂**：
+    *   **多語言支援**：即時切換繁體中文與英文介面。
     *   **暗黑模式 (Dark Mode)**：支援一鍵切換深色/淺色主題。
     *   **精緻 / 流暢模式**：可切換華麗的毛玻璃特效 (精緻模式) 與浮動動畫，或選擇流暢模式以獲得極致的效能體驗。
 
