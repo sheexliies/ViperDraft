@@ -99,7 +99,11 @@ Once you have opened the application (Online or Local):
 
 | Icon | Button | Description |
 | :---: | :--- | :--- |
-| 📂 | **Select File** | Upload your player list (`.xlsx`). |
+| 🌐 | **Language** | Switch between English and Chinese. |
+| ✨/💨 | **Rich Mode** | Toggle visual effects (Rich/Performance). |
+| ☀️/🌙 | **Theme** | Toggle Dark/Light mode. |
+| ▼ | **Collapse** | Expand/Collapse control panel. |
+| � | **Select File** | Upload your player list (`.xlsx`). |
 | 📥 | **Template** | Download the standard Excel template. |
 | 👀 | **Preview** | View the uploaded player data. |
 | 📥 | **Load** | Initialize the draft board based on settings. |
@@ -217,6 +221,10 @@ Once you have opened the application (Online or Local):
 
 | 圖示 | 按鈕名稱 | 功能描述 |
 | :---: | :--- | :--- |
+| 🌐 | **語言** | 切換中/英文介面。 |
+| ✨/💨 | **精緻模式** | 切換視覺特效 (精緻/流暢)。 |
+| ☀️/🌙 | **主題** | 切換深色/淺色模式。 |
+| ▼ | **收合** | 展開/收合控制面板。 |
 | 📂 | **選擇檔案** | 上傳您的球員名單 Excel 檔。 |
 | 📥 | **範本** | 下載標準格式範本，方便填寫。 |
 | 👀 | **預覽** | 檢視目前程式讀取到的名單資料。 |
