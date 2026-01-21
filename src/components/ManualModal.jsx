@@ -67,11 +67,21 @@ const ManualModal = ({ isOpen, onClose, team, availablePlayers, onSelect, teams,
     const uiTexts = {
         zh: {
             title: (name, score) => `為 ${name} 選擇隊員 (目前 ${score} 分)`,
-            placeholder: "搜尋隊員..."
+            placeholder: "搜尋隊員...",
+            riskDesc: {
+                0: "安全選擇",
+                1: "高風險：可能導致後續無人可選",
+                2: "分數不符 (過高或過低)"
+            }
         },
         en: {
             title: (name, score) => `Select player for ${name} (Current: ${score} pts)`,
-            placeholder: "Search players..."
+            placeholder: "Search players...",
+            riskDesc: {
+                0: "Safe selection",
+                1: "High Risk: May cause deadlock later",
+                2: "Invalid: Score out of range"
+            }
         }
     };
     const t = uiTexts[language] || uiTexts.zh;
@@ -101,7 +111,7 @@ const ManualModal = ({ isOpen, onClose, team, availablePlayers, onSelect, teams,
                                 <span 
                                     className="risk-badge" 
                                     style={{ cursor: 'help', marginRight: '6px' }}
-                                    onMouseEnter={(e) => handleTooltipEnter(e, player.risk.description)}
+                                    onMouseEnter={(e) => handleTooltipEnter(e, t.riskDesc[player.risk.level] || player.risk.description)}
                                     onMouseLeave={handleTooltipLeave}
                                 >
                                     {player.risk.status}
