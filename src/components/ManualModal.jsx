@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { DraftLogic } from '../utils/DraftLogic';
 
-const ManualModal = ({ isOpen, onClose, team, availablePlayers, onSelect, teams, settings, teammatesPerTeam }) => {
+const ManualModal = ({ isOpen, onClose, team, availablePlayers, onSelect, teams, settings, teammatesPerTeam, language }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [tooltip, setTooltip] = useState(null); // { text, x, y, position }
     const timeoutRef = useRef(null);
@@ -64,11 +64,23 @@ const ManualModal = ({ isOpen, onClose, team, availablePlayers, onSelect, teams,
         }, 200); // 200ms 緩衝時間讓滑鼠移動過去
     };
 
+    const uiTexts = {
+        zh: {
+            title: (name, score) => `為 ${name} 選擇隊員 (目前 ${score} 分)`,
+            placeholder: "搜尋隊員..."
+        },
+        en: {
+            title: (name, score) => `Select player for ${name} (Current: ${score} pts)`,
+            placeholder: "Search players..."
+        }
+    };
+    const t = uiTexts[language] || uiTexts.zh;
+
     return (
         <div className={`modal-overlay ${isOpen ? 'open' : ''}`}>
             <div className="modal-content">
                 <div className="modal-header">
-                    <span>為 {team.name} 選擇隊員 (目前 {team.score} 分)</span>
+                    <span>{t.title(team.name, team.score)}</span>
                     <button className="close-btn" onClick={onClose}>&times;</button>
                 </div>
                 
@@ -76,7 +88,7 @@ const ManualModal = ({ isOpen, onClose, team, availablePlayers, onSelect, teams,
                     <input 
                         type="text" 
                         className="search-input" 
-                        placeholder="搜尋隊員..." 
+                        placeholder={t.placeholder} 
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />

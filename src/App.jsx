@@ -58,6 +58,66 @@ function App() {
         }
     }, [isRichMode]);
 
+    // 語言狀態
+    const [language, setLanguage] = useState(() => localStorage.getItem('draftLanguage') || 'zh');
+    useEffect(() => localStorage.setItem('draftLanguage', language), [language]);
+
+    // 系統訊息翻譯字典
+    const appTexts = {
+        zh: {
+            restoreMsg: "已還原上次的名單，請載入設定",
+            uploadMsg: "請上傳名單並載入設定",
+            autoRepair: "系統已自動修復損毀的資料",
+            fileEmpty: "檔案內容為空",
+            readError: "無法讀取有效資料，請確認 Excel 包含「姓名」與「分數」欄位，且分數大於 0",
+            dupName: "錯誤：名單中包含重複的姓名 ({names})，請修正後重新上傳",
+            readSuccess: "已讀取 {n} 位隊員資料",
+            noFile: "請先上傳 Excel 檔案",
+            teamCountError: "隊伍數量設定錯誤 (必須大於 0)",
+            notEnough: "名單人數不足！設定需求 {needed} 人 ({teams}隊 x {perTeam}人)，但目前僅 {current} 人。",
+            ready: "準備就緒，請選擇選秀模式",
+            draftComplete: "選秀完成！",
+            pickError: "錯誤：{team} 無法選人 - {error}",
+            pickMsg: "輪次 {round}: {team} 選擇了 {player}",
+            undoMsg: "已復原 {team} 的選擇",
+            swapMsg: "已交換: {p1} ↔ {p2}",
+            autoDraftDone: "自動選秀完成！(嘗試 {n} 次)",
+            autoDraftFail: "自動選秀失敗 (已嘗試 {n} 次)：{error}",
+            reset: "已重置",
+            clearConfirm: "確定要清除所有暫存資料嗎？這將會刪除所有設定、名單與選秀進度，並重新整理頁面。"
+        },
+        en: {
+            restoreMsg: "Restored previous list, please load settings.",
+            uploadMsg: "Please upload list and load settings.",
+            autoRepair: "System auto-repaired corrupted data.",
+            fileEmpty: "File is empty.",
+            readError: "Cannot read valid data. Please ensure Excel contains 'name' and 'score' columns, and score > 0.",
+            dupName: "Error: Duplicate names found ({names}). Please fix and re-upload.",
+            readSuccess: "Read {n} players.",
+            noFile: "Please upload Excel file first.",
+            teamCountError: "Invalid team count (must be > 0).",
+            notEnough: "Not enough players! Need {needed} ({teams} teams x {perTeam}), but only have {current}.",
+            ready: "Ready. Choose draft mode.",
+            draftComplete: "Draft Complete!",
+            pickError: "Error: {team} cannot pick - {error}",
+            pickMsg: "Round {round}: {team} picked {player}",
+            undoMsg: "Undid selection for {team}",
+            swapMsg: "Swapped: {p1} ↔ {p2}",
+            autoDraftDone: "Auto draft complete! ({n} attempts)",
+            autoDraftFail: "Auto draft failed ({n} attempts): {error}",
+            reset: "Reset.",
+            clearConfirm: "Are you sure you want to clear all cache? This will delete all settings, rosters, and progress, and reload the page."
+        }
+    };
+
+    const t = useCallback((key, params = {}) => {
+        let str = appTexts[language]?.[key] || appTexts['zh'][key] || key;
+        Object.keys(params).forEach(k => {
+            str = str.replace(`{${k}}`, params[k]);
+        });
+        return str;
+    }, [language]);
+
     // 匯出設定：是否包含分數
     const [exportWithScores, setExportWithScores] = useState(true);
 
@@ -153,10 +213,10 @@ function App() {
     // 檢查是否剛執行過自動修復，並顯示提示訊息
     useEffect(() => {
         if (sessionStorage.getItem('draftAutoRepaired')) {
-            setDraftStatus(prev => ({ ...prev, message: "系統已自動修復損毀的資料", messageType: "success" }));
+            setDraftStatus(prev => ({ ...prev, message: t('autoRepair'), messageType: "success" }));
             sessionStorage.removeItem('draftAutoRepaired');
         }
-    }, []);
+    }, [t]);
 
     // 監聽捲動事件，控制 Header 陰影
     const [isScrolled, setIsScrolled] = useState(false);
@@ -232,7 +292,7 @@ function App() {
             const rawData = XLSX.utils.sheet_to_json(ws, { header: 1 });
             
             if (!rawData || rawData.length === 0) {
-                setDraftStatus(prev => ({ ...prev, message: "檔案內容為空", messageType: "error" }));
+                setDraftStatus(prev => ({ ...prev, message: t('fileEmpty'), messageType: "error" }));
                 return;
             }
 
@@ -304,7 +364,7 @@ function App() {
             }
 
             if (formattedData.length === 0) {
-                 setDraftStatus(prev => ({ ...prev, message: "無法讀取有效資料，請確認 Excel 包含「姓名」與「分數」欄位，且分數大於 0", messageType: "error" }));
+                 setDraftStatus(prev => ({ ...prev, message: t('readError'), messageType: "error" }));
                  return;
             }
 
@@ -325,14 +385,14 @@ function App() {
                 const dupList = Array.from(duplicates).join(', ');
                 setDraftStatus(prev => ({ 
                     ...prev, 
-                    message: `錯誤：名單中包含重複的姓名 (${dupList})，請修正後重新上傳`, 
+                    message: t('dupName', { names: dupList }), 
                     messageType: "error" 
                 }));
                 return;
             }
 
             setAllPlayers(formattedData);
-            setDraftStatus(prev => ({ ...prev, message: `已讀取 ${formattedData.length} 位隊員資料`, messageType: 'success' }));
+            setDraftStatus(prev => ({ ...prev, message: t('readSuccess', { n: formattedData.length }), messageType: 'success' }));
         };
         reader.readAsBinaryString(file);
     };
@@ -340,19 +400,19 @@ function App() {
     // 載入並初始化
     const handleLoadData = () => {
         if (allPlayers.length === 0) {
-            setDraftStatus(prev => ({ ...prev, message: "請先上傳 Excel 檔案", messageType: "error" }));
+            setDraftStatus(prev => ({ ...prev, message: t('noFile'), messageType: "error" }));
             return;
         }
 
         if (!settings.teamsCount || settings.teamsCount <= 0) {
-            setDraftStatus(prev => ({ ...prev, message: "隊伍數量設定錯誤 (必須大於 0)", messageType: "error" }));
+            setDraftStatus(prev => ({ ...prev, message: t('teamCountError'), messageType: "error" }));
             return;
         }
 
         // 驗證：檢查名單人數是否足夠
         const totalSlotsNeeded = settings.teamsCount * settings.teammatesPerTeam;
         if (allPlayers.length < totalSlotsNeeded) {
-            const errorMsg = `名單人數不足！設定需求 ${totalSlotsNeeded} 人 (20隊 x 6人)，但目前僅 ${allPlayers.length} 人。`;
+            const errorMsg = t('notEnough', { needed: totalSlotsNeeded, teams: settings.teamsCount, perTeam: settings.teammatesPerTeam, current: allPlayers.length });
             setDraftStatus(prev => ({ ...prev, message: errorMsg, messageType: "error" }));
             alert(`⚠️ 警告：${errorMsg}\n\n請調整「隊伍數量」或「每隊人數」，或是上傳更完整的名單。`);
             return; // 停止載入，避免程式跑版
@@ -387,7 +447,7 @@ function App() {
             currentPickIndex: 0,
             isDrafting: false,
             isComplete: false,
-            message: "準備就緒，請選擇選秀模式",
+            message: t('ready'),
             messageType: "success",
             progress: 0
         });
@@ -396,7 +456,7 @@ function App() {
     // 執行單次選秀 (核心)
     const executePick = useCallback((manualPlayer = null) => {
         if (draftStatus.currentPickIndex >= draftOrder.length) {
-            setDraftStatus(prev => ({ ...prev, isComplete: true, message: "選秀完成！", messageType: "success", isDrafting: false }));
+            setDraftStatus(prev => ({ ...prev, isComplete: true, message: t('draftComplete'), messageType: "success", isDrafting: false }));
             return false;
         }
 
@@ -415,7 +475,7 @@ function App() {
             );
 
             if (error && !valid.length) {
-                setDraftStatus(prev => ({ ...prev, message: `錯誤：${currentTeam.name} 無法選人 - ${error}`, messageType: "error", isDrafting: false }));
+                setDraftStatus(prev => ({ ...prev, message: t('pickError', { team: currentTeam.name, error }), messageType: "error", isDrafting: false }));
                 return false;
             }
 
@@ -440,12 +500,12 @@ function App() {
             ...prev,
             currentPickIndex: nextIndex,
             progress: progress,
-            message: `輪次 ${nextIndex}: ${currentTeam.name} 選擇了 ${playerToPick.name}`,
+            message: t('pickMsg', { round: nextIndex, team: currentTeam.name, player: playerToPick.name }),
             isComplete: nextIndex >= draftOrder.length
         }));
 
         return true;
-    }, [draftStatus.currentPickIndex, draftOrder, teams, availablePlayers, settings]);
+    }, [draftStatus.currentPickIndex, draftOrder, teams, availablePlayers, settings, t]);
 
     // 上一步 (Undo)
     const handleUndo = useCallback(() => {
@@ -471,10 +531,10 @@ function App() {
             currentPickIndex: prevIndex,
             isComplete: false,
             isDrafting: false, // 暫停自動選秀
-            message: `已復原 ${team.name} 的選擇`,
+            message: t('undoMsg', { team: team.name }),
             progress: progress
         }));
-    }, [draftStatus.currentPickIndex, draftOrder, teams]);
+    }, [draftStatus.currentPickIndex, draftOrder, teams, t]);
 
     // 執行交換核心邏輯
     const performSwap = useCallback((sourceTeamIdx, sourceP, targetTeamIdx, targetP) => {
@@ -505,8 +565,8 @@ function App() {
         }
 
         setTeams(newTeams);
-        setDraftStatus(prev => ({ ...prev, message: `已交換: ${sourceP.name} ↔ ${targetP.name}`, messageType: 'success' }));
-    }, [teams]);
+        setDraftStatus(prev => ({ ...prev, message: t('swapMsg', { p1: sourceP.name, p2: targetP.name }), messageType: 'success' }));
+    }, [teams, t]);
 
     // 處理隊員交換 (點擊)
     const handlePlayerClick = useCallback((teamIndex, player) => {
@@ -570,7 +630,7 @@ function App() {
                         ...prev,
                         currentPickIndex: currentIndex,
                         progress: 100,
-                        message: `自動選秀完成！(嘗試 ${attempt + 1} 次)`,
+                        message: t('autoDraftDone', { n: attempt + 1 }),
                         messageType: "success",
                         isComplete: true,
                         isDrafting: false
@@ -584,7 +644,7 @@ function App() {
                         setAvailablePlayers(currentAvailable);
                         setDraftStatus(prev => ({ 
                             ...prev, 
-                            message: `自動選秀失敗 (已嘗試 ${maxAttempts} 次)：${err.message}`, 
+                            message: t('autoDraftFail', { n: maxAttempts, error: err.message }), 
                             messageType: "error", 
                             isDrafting: false,
                             currentPickIndex: currentIndex,
@@ -648,15 +708,15 @@ function App() {
             currentPickIndex: 0,
             isDrafting: false,
             isComplete: false,
-            message: "已重置",
+            message: t('reset'),
             messageType: "normal",
             progress: 0
         });
-    }, []);
+    }, [t]);
 
     // 清除所有暫存
     const handleClearCache = () => {
-        if (window.confirm("確定要清除所有暫存資料嗎？這將會刪除所有設定、名單與選秀進度，並重新整理頁面。")) {
+        if (window.confirm(t('clearConfirm'))) {
             localStorage.clear();
             window.location.reload();
         }
@@ -732,6 +792,8 @@ function App() {
                         toggleRichMode={() => setIsRichMode(!isRichMode)}
                         exportWithScores={exportWithScores}
                         setExportWithScores={setExportWithScores}
+                        language={language}
+                        setLanguage={setLanguage}
                     />
                     <StatusBar message={draftStatus.message} progress={draftStatus.progress} type={draftStatus.messageType} />
                 </div>
@@ -750,6 +812,7 @@ function App() {
                         isSwapMode={draftStatus.isComplete}
                         swapSource={swapSource}
                         onPlayerSwap={performSwap}
+                        language={language}
                     />
                 ))}
             </div>
@@ -763,6 +826,7 @@ function App() {
                 teams={teams}
                 settings={settings}
                 teammatesPerTeam={settings.teammatesPerTeam}
+                language={language}
             />
 
             <DataPreviewModal 

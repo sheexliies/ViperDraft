@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './TeamCard.css';
 
-const TeamCard = ({ team, index, isActive, minScore, maxScore, onPlayerClick, isSwapMode, swapSource, onPlayerSwap }) => {
+const TeamCard = ({ team, index, isActive, minScore, maxScore, onPlayerClick, isSwapMode, swapSource, onPlayerSwap, language }) => {
     const cardRef = useRef(null);
     const [dragOverId, setDragOverId] = useState(null);
 
@@ -61,6 +61,12 @@ const TeamCard = ({ team, index, isActive, minScore, maxScore, onPlayerClick, is
         }
     };
 
+    const uiTexts = {
+        zh: { unit: "分", remaining: "剩餘" },
+        en: { unit: "pts", remaining: "Rem" }
+    };
+    const t = uiTexts[language] || uiTexts.zh;
+
     return (
         <div 
             ref={cardRef}
@@ -85,10 +91,10 @@ const TeamCard = ({ team, index, isActive, minScore, maxScore, onPlayerClick, is
                 <div className="team-name">{team.name}</div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
                     <div className={`team-score score-badge ${scoreClass}`}>
-                        {team.score} 分
+                        {team.score} {t.unit}
                     </div>
                     <div style={{ fontSize: '0.75em', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                        剩餘: {remaining}
+                        {t.remaining}: {remaining}
                     </div>
                 </div>
             </div>
