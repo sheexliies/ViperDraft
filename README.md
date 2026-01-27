@@ -244,33 +244,3 @@ Once you have opened the application (Online or Local):
 3.  **進行選秀** 🎲：使用 **「自動選秀」** (快速) 或 **「手動選人」** (精準)。
 4.  **戰力調整** 🔧：選秀結束後，可拖曳或點擊交換隊員。
 5.  **存檔匯出** 📤：點擊 **「匯出結果」** 保存最終名單。
-
----
-
-## 🛠️ Tech Stack / 技術棧
-
-*   **Frontend Framework**: React 18
-*   **Build Tool**: Vite
-*   **Language**: JavaScript (ES6+)
-*   **Styling**: CSS3 (Variables, Flexbox, Grid, Animations)
-*   **Data Processing**: SheetJS (xlsx)
-*   **Performance**: React.memo / useMemo optimizations, CSS will-change management
-
-## 📂 Project Structure / 專案結構
-
-```
-ViperDraft/
-├── src/
-│   ├── components/
-│   │   ├── ControlPanel.jsx    # 控制面板 (設定、按鈕群組)
-│   │   ├── TeamCard.jsx        # 隊伍卡片 (顯示、拖曳邏輯)
-│   │   ├── ManualModal.jsx     # 手動選人視窗
-│   │   ├── DataPreviewModal.jsx# 資料預覽視窗
-│   │   └── StatusBar.jsx       # 狀態列
-│   ├── utils/
-│   │   └── DraftLogic.js       # 核心演算法 (Softmax, 可行性檢查)
-│   ├── App.jsx                 # 主程式邏輯
-│   └── main.jsx                # 入口點
-├── index.css                   # 全域樣式與動畫
-└── index.html
-```
